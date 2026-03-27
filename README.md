@@ -32,7 +32,7 @@ volumes:
 ```
 
 ### .env settings
-Before starting the bot you have to add your telegram-bot token given by ! [BotFather](https://t.me/botfather) and your RuTracker account credentials to .env file.
+Before starting the bot you have to add your telegram-bot token given by [BotFather](https://t.me/botfather) and your RuTracker account credentials to .env file.
 ```
 BOT_TOKEN=YOUR_BOT_TOKEN
 USERNAME=YOUR_RUTRACKER_USERNAME
@@ -73,4 +73,4 @@ qbittorrent:
     restart: unless-stopped
 ```
 
-If you have any issues create an issue or contact me in a ! [Telegram](https://t.me/revengefir) or Discord(revengefir).
+If you have any issues create an issue or contact me in a [Telegram](https://t.me/revengefir) or Discord(revengefir).
