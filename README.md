@@ -42,6 +42,7 @@ PASSWORD=YOUR_RUTRACKER_PASSWORD
 When you set up all exact same way as were written you can start bot using one command:
 `docker compose up -d`
 
+## Integration
 Also you can integrate it with your qBittorrent web-client for media-server like Jellyfin and Plex. 
 Example docker-compose.yml:
 ```
