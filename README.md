@@ -75,4 +75,4 @@ services:
       restart: unless-stopped
 ```
 
-If you have any issues create an issue or contact me in a [Telegram](https://t.me/revengefir) or Discord(revengefir).
+If you have any issues create an issue or contact me in a [Telegram](https://t.me/revengefir) or Discord (revengefir).
