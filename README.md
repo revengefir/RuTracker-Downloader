@@ -1,5 +1,6 @@
 ## RuTracker-Downloader
-Lightweight telegram-bot written in Python using python-telegram-bot for downloading .torrent files from RuTracker by theme id.
-Made for integration with qBittorrent. 
+Lightweight telegram-bot written in Python using python-telegram-bot for downloading .torrent files to directories depending on type of content.
 
-Ready-to-use docker-compose setup to avoid geoban using SOCKS5 proxy.
+Ready-to-use docker-compose.yml with VLESS-proxy to avoid RuTracker and Telegram GeoBan in Russia and other countries where ISP blocks them. 
+
+There are two types of content series and films with their own directories by default. 
