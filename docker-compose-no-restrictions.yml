@@ -1,0 +1,9 @@
+services:
+  rutracker-parser:
+    build: ./app
+    command: python script.py
+    volumes:
+      - PATH_TO_TORRENTS:/home/downloads
+    env_file:
+      - ./.env
+    restart: unless-stopped

@@ -45,32 +45,33 @@ When you set up all exact same way as were written you can start bot using one c
 Also you can integrate it with your qBittorrent web-client for media-server like Jellyfin and Plex. 
 Example docker-compose.yml:
 ```
-qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:latest
-    container_name: qbittorrent
-    environment:
-      - TZ=YOURTZ
-      - WEBUI_PORT=WEBUI_PORT
-      - TORRENTING_PORT=TORRENTING_PORT
-    volumes:
-      - /mnt/hdd/qbittorrent/config:/config
-      - /path/to/download/films:/films
-      - /path/to/download/series:/series
-      - /path/to/torrents:/torrents # Use same path as rutracker-downloader one
-    ports:
-      - RANDOM_NUMBER:RANDOM_NUMBER
-      - RANDOM_NUMBER:RANDOM_NUMBER
-      - RANDOM_NUMBER:RANDOM_NUMBER
-    restart: unless-stopped
+services:
+  qbittorrent:
+      image: lscr.io/linuxserver/qbittorrent:latest
+      container_name: qbittorrent
+      environment:
+        - TZ=YOURTZ
+        - WEBUI_PORT=WEBUI_PORT
+        - TORRENTING_PORT=TORRENTING_PORT
+      volumes:
+        - /mnt/hdd/qbittorrent/config:/config
+        - /path/to/download/films:/films
+        - /path/to/download/series:/series
+        - /path/to/torrents:/torrents # Use same path as rutracker-downloader one
+      ports:
+        - RANDOM_NUMBER:RANDOM_NUMBER
+        - RANDOM_NUMBER:RANDOM_NUMBER
+        - RANDOM_NUMBER:RANDOM_NUMBER
+      restart: unless-stopped
 
-  rutracker-downloader:
-    build: ./app
-    command: python script.py
-    volumes:
-      - /path/to/torrents:/home/downloads
-    env_file:
-      - ./.env
-    restart: unless-stopped
+    rutracker-downloader:
+      build: ./app
+      command: python script.py
+      volumes:
+        - /path/to/torrents:/home/downloads
+      env_file:
+        - ./.env
+      restart: unless-stopped
 ```
 
 If you have any issues create an issue or contact me in a [Telegram](https://t.me/revengefir) or Discord(revengefir).
