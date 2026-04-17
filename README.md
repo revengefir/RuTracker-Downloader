@@ -32,7 +32,7 @@ volumes:
 ```
 
 ### .env settings
-Before starting the bot you have to add your telegram-bot token given by [BotFather](https://t.me/botfather) and your RuTracker account credentials to .env file.
+Before starting the bot you have to create .env file and add your telegram-bot token given by [BotFather](https://t.me/botfather) and your RuTracker account credentials to .env file.
 ```
 BOT_TOKEN=YOUR_BOT_TOKEN
 USERNAME=YOUR_RUTRACKER_USERNAME
