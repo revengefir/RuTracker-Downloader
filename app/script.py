@@ -1,16 +1,8 @@
 import os
 import requests
-from telegram import Update
-from telegram.ext import (
-    ApplicationBuilder,
-    CommandHandler,
-    MessageHandler,
-    ConversationHandler,
-    ContextTypes,
-    filters,
-)
+from shingram import Bot
 
-#CONFIG
+# CONFIG
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 
 USERNAME = os.environ.get("USERNAME")
@@ -21,8 +13,7 @@ BASE_TORRENT_URL = "https://rutracker.org/forum/dl.php?t="
 
 DOWNLOAD_DIR = "/home/downloads"
 
-TYPE, TORRENT_ID = range(2)
-
+bot = Bot(BOT_TOKEN)
 
 def login():
     session = requests.Session()
@@ -40,78 +31,66 @@ def login():
     session.post(LOGIN_URL, data=login_data, headers=headers)
     return session
 
-
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Send type: films or series")
-    return TYPE
+SESSION = login()
 
 
-async def get_type(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_type = update.message.text.lower()
-
-    if user_type not in ["films", "series"]:
-        await update.message.reply_text("Only 'films' or 'series'")
-        return TYPE
-
-    context.user_data["type"] = user_type
-    await update.message.reply_text("Now send torrent ID (number after t=)")
-    return TORRENT_ID
-
-
-async def get_torrent(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    torrent_id = update.message.text.strip()
-
-    if not torrent_id.isdigit():
-        await update.message.reply_text("ID must be a number")
-        return TORRENT_ID
-
-    content_type = context.user_data["type"]
-
-    session = login()
-
-    url = BASE_TORRENT_URL + torrent_id
-
-    headers = {
-        "User-Agent": "Mozilla/5.0"
-    }
-
-    response = session.get(url, headers=headers)
-
-
-    folder_path = os.path.join(DOWNLOAD_DIR, content_type)
-    os.makedirs(folder_path, exist_ok=True)
-
-    file_path = os.path.join(folder_path, f"{torrent_id}.torrent")
-
-    with open(file_path, "wb") as f:
-        f.write(response.content)
-
-    await update.message.reply_text(f"Downloaded to {file_path}")
-
-    return ConversationHandler.END
-
-
-async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Cancelled")
-    return ConversationHandler.END
-
-
-def main():
-    app = ApplicationBuilder().token(BOT_TOKEN).build()
-
-    conv_handler = ConversationHandler(
-        entry_points=[CommandHandler("start", start)],
-        states={
-            TYPE: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_type)],
-            TORRENT_ID: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_torrent)],
-        },
-        fallbacks=[CommandHandler("cancel", cancel)],
+@bot.on("command:start")
+def handle_start(event):
+    bot.send_message(
+        chat_id=event.chat_id,
+        text=("Send message in format: <type> <rutracker_id>(digits after t=)")
     )
 
-    app.add_handler(conv_handler)
+@bot.on("message")
+def handle_message(event):
+    try:
+        if not event.text:
+            return
 
-    app.run_polling()
+        parts = event.text.strip().split()
 
+        if len(parts) != 2:
+            bot.send_message(
+                chat_id=event.chat_id,
+                text="Format: <type> <id> Example: films 123456"
+            )
+            return
 
-if __name__ == "__main__":
-    main()
+        content_type = parts[0].lower()
+        torrent_id = parts[1]
+
+        if not torrent_id.isdigit():
+            bot.send_message(
+                chat_id=event.chat_id,
+                text="ID must be a number"
+            )
+            return
+
+        folder_path = os.path.join(DOWNLOAD_DIR, content_type)
+        os.makedirs(folder_path, exist_ok=True)
+
+        url = BASE_TORRENT_URL + torrent_id
+
+        headers = {
+            "User-Agent": "Mozilla/5.0"
+        }
+
+        response = SESSION.get(url, headers=headers)
+
+        file_path = os.path.join(folder_path, f"{torrent_id}.torrent")
+
+        with open(file_path, "wb") as f:
+            f.write(response.content)
+
+        bot.send_message(
+            chat_id=event.chat_id,
+            text=f"Downloaded to {file_path}"
+        )
+
+    except Exception as e:
+        bot.send_message(
+            chat_id=event.chat_id,
+            text=f"Error: {str(e)}"
+        )
+
+bot.run_async()
