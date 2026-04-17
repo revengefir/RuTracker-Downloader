@@ -3,7 +3,7 @@ Lightweight telegram-bot written in Python using [shingram](https://github.com/n
 
 Ready-to-use docker-compose.yml with VLESS-proxy to avoid RuTracker and Telegram GeoBan in Russia and other countries where ISP blocks them. 
 
-There are two types of content series and films with their own directories by default. 
+It downloads .torrent files using one message in format <type> <rutracker_id> it creates directory called type and download file from rutracker.org using id.
 ## Setup Guide
 There are two variants of docker-compose.yml configs.
 1. docker-compose.yml - built-in xray-client container to avoid ISP's ban.
