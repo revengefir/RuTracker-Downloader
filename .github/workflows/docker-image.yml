@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Login
-      run: docker login --username ${{ secrets. GHCR_USER }} --password-stdin ${{ secrets.GHCR_PASS }} ghcr.io 
+      run: echo "${{ secrets.GHCR_PASS }}" | docker login --username "${{ secrets. GHCR_USER }}" --password-stdin ghcr.io 
       
     - name: Build
       run: |
