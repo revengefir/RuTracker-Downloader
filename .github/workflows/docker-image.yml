@@ -14,5 +14,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker login --username ${{ secrets. GHCR_USER }} --password-stdin ${{ secrets.GHCR_PASS }} ghcr.io && docker build app --tag ghcr.io/revengefir/rutracker-downloader:$(date +%s) && docker push ghcr.io/revengefir/rutracker-downloader:$(date +%s)
+    - name: Login
+      run: docker login --username ${{ secrets. GHCR_USER }} --password-stdin ${{ secrets.GHCR_PASS }} ghcr.io 
+      
+    - name: Build
+      run: |
+            docker build app --tag ghcr.io/revengefir/rutracker-downloader:$(date +%s) && docker push ghcr.io/revengefir/rutracker-downloader:$(date +%s)
