@@ -2,7 +2,7 @@ import os
 import requests
 from shingram import Bot
 
-# CONFIG
+# CONF
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 
 USERNAME = os.environ.get("USERNAME")
