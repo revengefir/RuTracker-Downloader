@@ -24,7 +24,7 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
       
       - name: Build Docker image
-        run: docker build -t ghcr.io/$PackageName:latest ./app
+        run: docker build -t ghcr.io/${{ github.actor}}/$PackageName:latest ./app
 
       - name: Push Docker image
-        run: docker push ghcr.io/$PackageName:latest
+        run: docker push ghcr.io/${{ github.actor}}/$PackageName:latest
