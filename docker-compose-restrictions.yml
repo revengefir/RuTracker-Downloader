@@ -1,0 +1,26 @@
+services:
+  rutracker-parser:
+    image: ghcr.io/revengefir/rutracker-downloader:latest
+    volumes:
+      - PATH_TO_TORRENTS:/home/downloads
+    env_file:
+      - ./.env
+    restart: unless-stopped
+    depends_on:
+      - vless-proxy
+    network_mode: "service:vless-proxy"
+
+  vless-proxy:
+    image: "adkix/xray-client"
+    environment:
+      - ADDRESS=VLESS_IP
+      - PORT=VLESS_PORT
+      - ID=VLESS_ID
+      - PUBLIC_KEY=VLESS_PUB_KEY
+      - SHORT_ID=VLESS_SHORT_ID
+      - SNI=VLESS_SNI
+    devices:
+      - /dev/net/tun
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
