@@ -2,7 +2,7 @@ services:
   rutracker-downloader:
     image: ghcr.io/revengefir/rutracker-downloader:latest
     volumes:
-      - ./lol:/home/downloads
+      - PATH_TO_TORRENTS:/home/downloads
     env_file:
       - ./.env
     restart: unless-stopped
